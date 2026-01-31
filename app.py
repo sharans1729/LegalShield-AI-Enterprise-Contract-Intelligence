@@ -8,6 +8,9 @@ from logic import get_legal_analysis, identify_language
 # 1. PAGE SETUP
 st.set_page_config(page_title="LegalShield AI | Enterprise", page_icon="🏛️", layout="wide")
 
+# FIX: Force load Material Icons for hosted environments
+st.markdown('<link href="[https://fonts.googleapis.com/icon?family=Material+Icons](https://fonts.googleapis.com/icon?family=Material+Icons)" rel="stylesheet">', unsafe_allow_html=True)
+
 # CUSTOM CSS: Enterprise Metrics
 st.markdown("""
     <style>
@@ -55,7 +58,6 @@ if uploaded_file:
         status.update(label="Audit Complete", state="complete")
 
     if "error" not in analysis:
-        # Metrics Header
         st.divider()
         m1, m2, m3, m4 = st.columns(4)
         score = analysis['composite_score']
@@ -65,21 +67,20 @@ if uploaded_file:
         m4.metric("Entities Found", len(analysis['entities'].get('parties', [])))
 
         st.divider()
-        # Top Section: Clause Audit
         st.subheader("🔍 Clause-by-Clause Audit")
         tab_prio, tab_full = st.tabs(["⚠️ Priority Risks", "📋 Full Audit Table"])
         with tab_prio:
             priority = [i for i in analysis['analysis'] if i['risk_level'] in ["High", "Medium"]]
             if priority:
                 for item in priority:
-                    with st.expander(f"⚠️ {item['clause_type']} ({item['risk_level']})"):
-                        st.write(f"**Issue:** {item['explanation']}")
-                        st.success(f"**Advice:** {item['renegotiation']}")
+                    with st.expander(f"⚠️ {item['clause_type'].upper()} — {item['risk_level']}"):
+                        st.write(f"**Legal Issue:** {item['explanation']}")
+                        st.success(f"**SME Strategy:** {item['renegotiation']}")
             else: st.success("No high-priority risks detected.")
         with tab_full: st.dataframe(analysis['analysis'], use_container_width=True)
 
         st.divider()
-        # Side-by-Side: Chart and Summary
+        # Side-by-Side Dashboard
         col_left, col_right = st.columns([1, 1])
         with col_left:
             st.subheader("📊 Compliance Radar")
