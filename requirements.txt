@@ -1,0 +1,10 @@
+streamlit
+openai
+spacy
+pypdf
+python-docx
+langdetect
+azure-ai-inference
+azure-core
+python-dotenv
+pandas
