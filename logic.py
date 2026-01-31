@@ -15,7 +15,6 @@ def get_legal_analysis(clauses):
     if not GITHUB_TOKEN:
         return {"error": "Authentication Token Missing. Check Secrets."}
 
-    # Analyze primary clauses for speed and relevance
     context_text = "\n".join(clauses[:15]) 
 
     system_prompt = """
